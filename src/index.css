@@ -50,6 +50,14 @@ header p {
   color: #9eb5b4;
 }
 
+progress {
+  display: block;
+  margin: auto auto;
+  margin-top: 0.5rem;
+  accent-color: #804242;
+  width: 80%;
+}
+
 .places-category {
   max-width: 85rem;
   margin: 2rem auto;
