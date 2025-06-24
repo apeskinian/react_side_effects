@@ -16,7 +16,10 @@ useEffect(() => {
 
   return createPortal(
     <dialog className="modal" ref={dialog} onClose={onClose}>
-      {children}
+      {/* only render the children if the prop open is set to true
+      this means that the timeout will be stopped in the deleteConfirmation
+      component */}
+      {open ? children : null}
     </dialog>,
     document.getElementById('modal')
   );
