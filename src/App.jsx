@@ -9,12 +9,13 @@ import { sortPlacesByDistance } from './loc.js'
 
 // retrieve stored data and map to places for initial state for pickedPlaces
 // located outside the app component to run only once
+// this is a side effect that doesn't need useEffect
 const storedIds = JSON.parse(localStorage.getItem('selectedPlaces')) || [];
 const storedPlaces = storedIds.map(id => AVAILABLE_PLACES.find((place) => place.id === id));
 
 function App() {
-  const modal = useRef();
   const selectedPlace = useRef();
+  const [ modalIsOpen, setModelIsOpen ] = useState(false);
   const [ availablePlaces, setAvailablePlaces ] = useState([]);
   const [ pickedPlaces, setPickedPlaces ] = useState(storedPlaces);
 
@@ -37,12 +38,12 @@ function App() {
   }, []);
 
   function handleStartRemovePlace(id) {
-    modal.current.open();
+    setModelIsOpen(true);
     selectedPlace.current = id;
   }
 
   function handleStopRemovePlace() {
-    modal.current.close();
+    setModelIsOpen(false);
   }
 
   function handleSelectPlace(id) {
@@ -73,7 +74,7 @@ function App() {
     setPickedPlaces((prevPickedPlaces) =>
       prevPickedPlaces.filter((place) => place.id !== selectedPlace.current)
     );
-    modal.current.close();
+    setModelIsOpen(false);
 
     const storedIds = JSON.parse(localStorage.getItem('selectedPlaces')) || [];
     localStorage.setItem(
@@ -84,7 +85,7 @@ function App() {
 
   return (
     <>
-      <Modal ref={modal}>
+      <Modal open={modalIsOpen} onClose={handleStopRemovePlace}>
         <DeleteConfirmation
           onCancel={handleStopRemovePlace}
           onConfirm={handleRemovePlace}
